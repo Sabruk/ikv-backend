@@ -14,6 +14,7 @@ const Home = () => {
 
       <h1 className="text-center w-[80vw] text-lg text-bold">Click below buttons to enter the respective contest details into Database</h1>
 
+      <button className="w-[145px] h-[45px] bg-green-700 text-white mx-5" onClick={() => route('Announcements')}>Announcements</button>
       <button className="w-[145px] h-[45px] bg-green-700 text-white mx-5" onClick={() => route('contest1')}>Contest1</button>
       <button className="w-[145px] h-[45px] bg-green-700 text-white" onClick={() => route('contest2')}>Contest2</button>
 

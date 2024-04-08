@@ -8,6 +8,7 @@ var getYouTubeID = require('get-youtube-id');
 
 
 export default function Contest1() {
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const [formData, setFormData] = useState({
     dayNumber: '',
@@ -74,7 +75,10 @@ export default function Contest1() {
 // console.log(result.fields)
 
   return (
-
+    <>
+    {isEnabled ? 
+  
+  (
     <div className="flex flex-col items-center">
 
     <button className=" ml-15 mt-10 bg-blue-800 text-white text-md w-[145px] h-[45px] rounded-md" onClick={handleBack}>← Go Back</button>
@@ -99,9 +103,25 @@ export default function Contest1() {
 
 
         <button type="submit" className="w-[140px] h-[45px] bg-green-900 text-white">Submit</button>
+        <button className="w-[130px] h-[45px] mt-5 rounded-md bg-[#2dad5c] text-white" onClick={() => setIsEnabled(false)}>Disable</button>
       </form>
     </div>
-
+    
     </div>
+  ) :
+
+  (
+    <div className="flex flex-col h-[100vh] justify-center items-center">
+
+        <h1 className="font-bold">Contest has been ended. Click below to enable the contest</h1>
+        <button className="w-[130px] h-[45px] rounded-md bg-[#2dad5c] text-white" onClick={() => setIsEnabled(true)}>Enable</button>
+
+      </div>
+  )
+  
+  }
+    
+
+    </>
   );
 }
