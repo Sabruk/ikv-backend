@@ -81,7 +81,7 @@ const NewContest = () => {
             <button className="ml-15 mt-10 bg-blue-800 text-white text-md w-[145px] h-[45px] rounded-md" onClick={handleBack}>← Go Back</button>
       
             <div className="flex flex-col justify-center items-center w-[60vw] mx-auto my-5 border-2 border-[#222222] p-10">
-                <h1 className="text-bold text-black my-5">Please don't enter the shortened URL. Add the long URL. The shortened URL for Google Form doesn't get integrated on Android devices.</h1>
+                <h1 className="text-bold text-black my-5">Please don&apos;t enter the shortened URL. Add the long URL. The shortened URL for Google Form doesn&apos;t get integrated on Android devices.</h1>
                 <h1 className="my-5">Create Contest</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center">
                     <label>Series Number:</label>
@@ -102,7 +102,7 @@ const NewContest = () => {
       
             <div className="w-[60vw] mx-auto my-5 border-2 border-[#222222] p-10">
                 <h2 className="text-xl font-semibold mb-3 text-[#2dad5c]">Contest Details</h2>
-                <h2 className="text-xl font-semibold mb-3">Please don't worry if the form link you entered and the form link displayed below doesn't match, the link format is changed for the purpose of integration into the site. Use the below delete option if you had wrongly entered a form link or any other detail...</h2>
+                <h2 className="text-xl font-semibold mb-3">Please don&apos;t worry if the form link you entered and the form link displayed below doesn&apos;t match, the link format is changed for the purpose of integration into the site. Use the below delete option if you had wrongly entered a form link or any other detail...</h2>
                 <ul>
                     {contestList.map((contest) => (
                         <li key={contest.id} className="mb-5">
