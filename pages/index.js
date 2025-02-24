@@ -18,6 +18,7 @@ const Home = () => {
       <button className="w-[145px] h-[45px] bg-green-700 text-white mx-5" onClick={() => route('NewContest')}>NewContest</button>
       <button className="w-[145px] h-[45px] bg-green-700 text-white mx-5" onClick={() => route('contest1')}>Contest1</button>
       <button className="w-[145px] h-[45px] bg-green-700 text-white" onClick={() => route('contest2')}>Contest2</button>
+      <button className="w-[145px] h-[45px] bg-green-700 text-white" onClick={() => route('contest3')}>Contest3</button>
 
     </div>
   )
