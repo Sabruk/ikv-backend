@@ -65,7 +65,7 @@ const Announcements = () => {
 
       <div className="flex flex-col justify-center items-center gap-8">
          {/* YouTube Links */}
-        {/* {Object.entries(data).map(([key, value]) => {
+         {Object.entries(data).map(([key, value]) => {
           if (key.startsWith('link')) {
             return (
               <div key={key}>
@@ -92,7 +92,7 @@ const Announcements = () => {
             );
           }
           return null;
-        })} */}
+        })} 
         {/* Title Input */}
         <div>
           <input
