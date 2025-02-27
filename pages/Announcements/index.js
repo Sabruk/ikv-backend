@@ -65,6 +65,7 @@ const Announcements = () => {
 
       <div className="flex flex-col justify-center items-center gap-8">
          {/* YouTube Links */}
+         {/*
          {Object.entries(data).map(([key, value]) => {
           if (key.startsWith('link')) {
             return (
@@ -73,7 +74,7 @@ const Announcements = () => {
                   type="text"
                   value={value}
                   onChange={(e) => handleInputChange(e, key)}
-                  placeholder={Enter YouTube Link ${key.slice(-1)}}
+                  placeholder={`Enter YouTube Link ${key.slice(-1)}`}
                   className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 />
                 <button
@@ -92,7 +93,7 @@ const Announcements = () => {
             );
           }
           return null;
-        })} 
+        })}  */}
         {/* Title Input */}
         <div>
           <input
