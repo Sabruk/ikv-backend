@@ -1,151 +1,169 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Navbar from "@/components/Navbar/Navbar";
-import { useRouter } from "next/router";
+import React, { useState } from 'react';
+import { db } from '../../firebase'; // Import the db from your firebase configuration
+import { doc, updateDoc } from 'firebase/firestore';
+import { toast, ToastContainer } from 'react-toastify'; // Import ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Toastify CSS
 
-const Results = () => {
-  const router = useRouter();
-  const [links, setLinks] = useState({
-    result1: '',
-    result2: '',
-    result3: '',
-    result4: '',
-    result5: '',
-    result6: '',
-    result7: '',
-    result8: ''
+const Announcements = () => {
+  // Set the initial state for the form data
+  const [data, setData] = useState({
+    link1: '',
+    link2: '',
+    link3: '',
+    link4: '',
+    link5: '',
+    link6: '',
+    title: '',
+    content: '',
+    image: '', // Store the image URL here
   });
 
-  // Load data from Firestore
-  useEffect(() => {
-    const fetchData = async () => {
-      const docRef = doc(db, 'Announcements', 'announcements');
-      const docSnap = await getDoc(docRef);
-      
-      if (docSnap.exists()) {
-        const data = docSnap.data().announcementDetails || {};
-        setLinks({
-          result1: data.result1 || '',
-          result2: data.result2 || '',
-          result3: data.result3 || '',
-          result4: data.result4 || '',
-          result5: data.result5 || '',
-          result6: data.result6 || '',
-          result7: data.result7 || '',
-          result8: data.result8 || ''
-        });
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const updateLink = async (key, value) => {
+  // Update any field in Firestore
+  const updateFieldInFirebase = async (key, value) => {
     const docRef = doc(db, 'Announcements', 'announcements');
-    try {
-      await updateDoc(docRef, {
-        [`announcementDetails.${key}`]: value
-      });
-      toast.success(`${key} updated successfully!`);
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
-    }
+    await updateDoc(docRef, { [`announcementDetails.${key}`]: value });
+    toast.success(`${key} added successfully!`); // Show success toast when field is updated
   };
 
+  // Handle form input changes and update state
   const handleInputChange = (e, key) => {
     const { value } = e.target;
-    setLinks(prev => ({ ...prev, [key]: value }));
+    setData((prevState) => ({ ...prevState, [key]: value }));
   };
 
-  const handleSave = async (key) => {
-    if (links[key]) {
-      await updateLink(key, links[key]);
-    } else {
-      toast.warning(`Please enter a URL for ${key}`);
+  // Handle adding fields to Firestore
+  const handleAddField = async (key) => {
+    const value = data[key];
+    if (value) {
+      await updateFieldInFirebase(key, value);
     }
   };
 
-  const handleDelete = async (key) => {
-    await updateLink(key, '');
-    setLinks(prev => ({ ...prev, [key]: '' }));
-    toast.success(`${key} cleared!`);
+  // Handle deleting fields from Firestore
+  const handleDeleteField = async (key) => {
+    const docRef = doc(db, 'Announcements', 'announcements');
+    await updateDoc(docRef, { [`announcementDetails.${key}`]: '' });
+    setData((prevState) => ({ ...prevState, [key]: '' }));
+    toast.error(`${key} deleted successfully!`); // Show delete toast
   };
 
-  // Extract YouTube ID from URL
-  const getYouTubeId = (url) => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+  // Handle image URL input
+  const handleImageURLChange = (e) => {
+    const { value } = e.target;
+    setData((prevState) => ({ ...prevState, image: value }));
+  };
+
+  // Handle deleting the image URL from Firestore
+  const handleDeleteImageURL = async () => {
+    await handleDeleteField('image');
+    toast.success('Image URL deleted successfully!'); // Show success toast
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="max-w-6xl mx-auto p-4">
-        <ToastContainer />
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">Manage Results Videos</h1>
-          <button 
-            onClick={() => router.push('/')}
-            className="bg-green-600 text-white px-4 py-2 rounded"
+    <div className="max-w-4xl mx-auto py-8">
+      <ToastContainer /> {/* ToastContainer added here */}
+
+      <div className="flex flex-col justify-center items-center gap-8">
+         {/* YouTube Links */}
+         {/*
+         {Object.entries(data).map(([key, value]) => {
+          if (key.startsWith('link')) {
+            return (
+              <div key={key}>
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => handleInputChange(e, key)}
+                  placeholder={`Enter YouTube Link ${key.slice(-1)}`}
+                  className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                />
+                <button
+                  onClick={() => handleAddField(key)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+                >
+                  Add Link {key.slice(-1)}
+                </button>
+                <button
+                  onClick={() => handleDeleteField(key)}
+                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300 ml-2"
+                >
+                  Delete Link {key.slice(-1)}
+                </button>
+              </div>
+            );
+          }
+          return null;
+        })}  */}
+        {/* Title Input */}
+        <div>
+          <input
+            type="text"
+            value={data.title}
+            onChange={(e) => handleInputChange(e, 'title')}
+            placeholder="Enter Title"
+            className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          />
+          <button
+            onClick={() => handleAddField('title')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
           >
-            ← Back to Home
+            Add Title
+          </button>
+          <button
+            onClick={() => handleDeleteField('title')}
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300 ml-2"
+          >
+            Delete Title
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.entries(links).map(([key, url]) => (
-            <div key={key} className="border rounded-lg p-4 shadow">
-              <div className="mb-3">
-                <label className="block font-medium mb-1">
-                  {key.replace('result', 'Result ')} URL
-                </label>
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => handleInputChange(e, key)}
-                  placeholder="https://youtube.com/..."
-                  className="w-full border p-2 rounded"
-                />
-              </div>
-              
-              <div className="flex gap-2 mb-3">
-                <button
-                  onClick={() => handleSave(key)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => handleDelete(key)}
-                  className="bg-red-600 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </div>
-              
-              {url && (
-                <div className="mt-2">
-                  <div className="aspect-w-16 aspect-h-9">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${getYouTubeId(url)}`}
-                      className="w-full h-40"
-                      title={key}
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Image URL Input */}
+        <div>
+          <input
+            type="text"
+            value={data.image}
+            onChange={(e) => handleImageURLChange(e)}
+            placeholder="Enter Image URL"
+            className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300 w-full"
+          />
+          <button
+            onClick={() => handleAddField('image')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 mt-2"
+          >
+            Add Image URL
+          </button>
+          <button
+            onClick={handleDeleteImageURL}
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300 mt-2"
+          >
+            Delete Image URL
+          </button>
+        </div>
+
+        {/* Content Input */}
+        <div>
+          <textarea
+            value={data.content}
+            onChange={(e) => handleInputChange(e, 'content')}
+            placeholder="Enter Content or Description"
+            className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300 w-full h-24"
+          />
+          <button
+            onClick={() => handleAddField('content')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
+          >
+            Add Content
+          </button>
+          <button
+            onClick={() => handleDeleteField('content')}
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300 ml-2"
+          >
+            Delete Content
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Results;
+export default Announcements;
