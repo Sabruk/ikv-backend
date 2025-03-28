@@ -17,6 +17,41 @@ const Results = () => {
     video8: '',
   });
 
+  const videoDetails = {
+    1: {
+      title: "ரமலான் தொடர் பயான் நிகழ்ச்சி - சரியான பதில்கள்",
+      release: "Will be released on 28th March - 10:30PM",
+    },
+    2: {
+      title: "ஓர் அழகிய உபதேசம் நிகழ்ச்சி - சரியான பதில்கள்",
+      release: "Will be released on 29th March - 4:30AM",
+    },
+    3: {
+      title: "தினம் ஒரு கேள்வி நிகழ்ச்சி - சரியான பதில்கள்",
+      release: "Will be released on 29th March - 5:00PM",
+    },
+    4: {
+      title: "ரமலான் தொடர் பயான் நிகழ்ச்சி - வெற்றியாளர்கள் பட்டியல்",
+      release: "Will be released on 29th March - 10:30PM",
+    },
+    5: {
+      title: "ஓர் அழகிய உபதேசம் நிகழ்ச்சி - வெற்றியாளர்கள் பட்டியல்",
+      release: "Will be released on 30th March - 4:30AM",
+    },
+    6: {
+      title: "Arabic Calligraphy Contest - Overall Participants Video",
+      release: "Will be released on 30th March - 1:30PM",
+    },
+    7: {
+      title: "தினம் ஒரு கேள்வி நிகழ்ச்சி - வெற்றியாளர்கள் பட்டியல்",
+      release: "Will be released on 30th March - 5:00PM",
+    },
+    8: {
+      title: "Arabic Calligraphy Contest - வெற்றியாளர்கள் பட்டியல்",
+      release: "Will be released on 30th March - 10:30PM",
+    }
+  };
+
   // Update any field in Firestore
   const updateFieldInFirebase = async (key, value) => {
     const docRef = doc(db, 'Results', 'videos');
@@ -61,7 +96,7 @@ const Results = () => {
                 type="text"
                 value={value}
                 onChange={(e) => handleInputChange(e, key)}
-                placeholder={`Enter YouTube Video URL ${key.slice(-1)}`}
+                placeholder={videoDetails[key.slice(-1)].title}
                 className="border border-gray-300 px-3 py-1 rounded-lg focus:outline-none focus:ring focus:border-blue-300 flex-1"
               />
               <button
