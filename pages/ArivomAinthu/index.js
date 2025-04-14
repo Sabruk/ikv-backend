@@ -98,22 +98,46 @@ const ArivomAinthu = () => {
     };
 
     const fetchContestList = async () => {
-        const contestRef = collection(db, 'WeeklyContest');
-        const snapshot = await getDocs(contestRef);
-        const contests = snapshot.docs.map(doc => ({ 
-            id: doc.id, 
-            ...doc.data().contestDetails 
-        }));
-        
-        // Sort by thodar name and part number
-        contests.sort((a, b) => {
-            if (a.thodarName === b.thodarName) {
-                return parseInt(a.partNumber) - parseInt(b.partNumber);
-            }
-            return a.thodarName.localeCompare(b.thodarName);
-        });
-        
-        setContestList(contests);
+        try {
+            const contestRef = collection(db, 'WeeklyContest');
+            const snapshot = await getDocs(contestRef);
+            
+            const contests = snapshot.docs.map(doc => {
+                const data = doc.data();
+                // Check if contestDetails exists
+                if (data && data.contestDetails) {
+                    return { 
+                        id: doc.id, 
+                        ...data.contestDetails 
+                    };
+                }
+                // Return a default object if contestDetails is missing
+                return {
+                    id: doc.id,
+                    thodarName: 'Unknown',
+                    partNumber: '0',
+                    date: 'N/A'
+                };
+            });
+            
+            // Sort with null checks
+            contests.sort((a, b) => {
+                if (!a.thodarName) return 1;
+                if (!b.thodarName) return -1;
+                
+                if (a.thodarName === b.thodarName) {
+                    const partA = a.partNumber ? parseInt(a.partNumber) : 0;
+                    const partB = b.partNumber ? parseInt(b.partNumber) : 0;
+                    return partA - partB;
+                }
+                return a.thodarName.localeCompare(b.thodarName);
+            });
+            
+            setContestList(contests);
+        } catch (error) {
+            console.error('Error fetching contest list:', error);
+            setContestList([]);
+        }
     };
 
     useEffect(() => {
